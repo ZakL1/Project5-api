@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Profile
 from .serializers import ProfileSerializer
+from rest_framework import generics, permissions
 
 
 class ProfileList(APIView):
@@ -13,3 +14,15 @@ class ProfileList(APIView):
         profiles = Profile.objects.all()
         serializer = ProfileSerializer(profiles, many=True, context={'request': request})
         return Response(serializer.data)
+    
+class ProfileDetail(generics.RetrieveDestroyAPIView):
+    "Retrieve or delete profiles"
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    serializer_class = ProfileSerializer
+    queryset = Profile.objects.all()
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.owner != request.user:
+            return Response({'detail': 'Not allowed'}, status=status.HTTP_403_FORBIDDEN)
+        return super().delete(request, *args, **kwargs)
