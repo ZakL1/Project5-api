@@ -5,8 +5,10 @@ cloudinary==1.43.0
 dj-rest-auth==7.0.1
 Django==5.2
 django-allauth==65.7.0
+django-auth==0.1.9
 django-cloudinary-storage==0.3.0
 django-cors-headers==4.7.0
+django-rest-auth==0.9.5
 djangorestframework==3.16.0
 idna==3.10
 pillow==11.1.0

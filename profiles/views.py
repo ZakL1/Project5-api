@@ -32,3 +32,10 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
         if instance.owner != request.user:
             return Response({'detail': 'Not allowed'}, status=status.HTTP_403_FORBIDDEN)
         return super().update(request, *args, **kwargs)
+    
+class ProfileMeView(generics.RetrieveAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user.profile
