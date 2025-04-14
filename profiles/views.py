@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Profile
 from .serializers import ProfileSerializer
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 
 
 class ProfileList(APIView):
@@ -16,7 +16,7 @@ class ProfileList(APIView):
         return Response(serializer.data)
     
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
-    "Retrieve or delete profiles"
+    "Retrieve, delete or update profiles"
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()

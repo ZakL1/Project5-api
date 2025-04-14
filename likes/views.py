@@ -1,6 +1,7 @@
 from rest_framework import generics, permissions
 from likes.models import Like
 from likes.serializers import LikeSerializer
+from rest_framework import permissions, generics, status
 
 
 class LikeList(generics.ListCreateAPIView):
@@ -14,7 +15,7 @@ class LikeList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
-class LikeDetail(generics.RetrieveDestroyAPIView):
+class LikeDetail(generics.RetrieveUpdateDestroyAPIView):
     "Retrieve or delete a like"
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = LikeSerializer
@@ -25,3 +26,16 @@ class LikeDetail(generics.RetrieveDestroyAPIView):
         if instance.owner != request.user:
             return Response({'detail': 'Not allowed'}, status=status.HTTP_403_FORBIDDEN)
         return super().delete(request, *args, **kwargs)
+    
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.owner != request.user and not request.user.is_superuser:
+            return Response({'detail': 'Not allowed'}, status=status.HTTP_403_FORBIDDEN)
+        return super().update(request, *args, **kwargs)
+    
+class ProfileMeView(generics.RetrieveAPIView):
+    serializer_class = LikeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user.like

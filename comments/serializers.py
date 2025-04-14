@@ -16,6 +16,6 @@ class CommentSerializer(serializers.ModelSerializer):
 
     def validate_body(self, value):
         if len(value.strip()) > 100:
-            raise serializers.ValidationError("Comment must be less than 50 characters long.")
+            raise serializers.ValidationError("Comment must be less than 100 characters long.")
         return value
 
