@@ -8,7 +8,7 @@ class Post(models.Model):
     """
     Post model, for created posts
     """
-    owner = models.OneToOneField(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=255, blank=True)
@@ -24,22 +24,16 @@ class Post(models.Model):
         return f'{self.id} {self.title}'
 
     def save(self, *args, **kwargs):
-        # Call original save method to ensure we have an image file
-        super().save(*args, **kwargs)
-
         if self.image:
             img = Image.open(self.image)
             output = BytesIO()
 
-            # Resize the image (change dimensions here)
-            img = img.convert('RGB')  # In case image is RGBA or other mode
-            img = img.resize((800, 600), Image.ANTIALIAS)
+            img = img.convert('RGB')
+            img = img.resize((800, 600), Image.Resampling.LANCZOS)
 
-            # Save to BytesIO object
             img.save(output, format='JPEG', quality=85)
             output.seek(0)
+            self.image = ContentFile(output.read(), self.image.name)
 
-            # Save resized image back to the image field
-            self.image.save(self.image.name, ContentFile(output.read()), save=False)
-            super().save(*args, **kwargs)  # Save again after resizing
-            img.save(self.image.path, format='JPEG', quality=85)
+        # Save once — after all processing is done
+        super().save(*args, **kwargs)

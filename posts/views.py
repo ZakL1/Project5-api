@@ -15,6 +15,13 @@ class PostList(APIView):
         serializer = PostSerializer(posts, many=True, context={'request': request})
         return Response(serializer.data)
     
+    def post(self, request):
+        serializer = PostSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save(owner=request.user)  # Ensure Post model uses ForeignKey for this
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     "Retrieve, delete or update a post"
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
