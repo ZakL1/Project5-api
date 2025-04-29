@@ -12,17 +12,20 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import sys
 
-if os.path.exists('env.py'):
+BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.append(str(BASE_DIR))
+
+if os.path.exists(os.path.join(BASE_DIR, 'env.py')):
     import env
 
-CLOUDINARY_STORAGE ={
-    'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL')
-}
 MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+print("DEFAULT_FILE_STORAGE is set to:", DEFAULT_FILE_STORAGE)
+
+STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -63,6 +66,7 @@ INSTALLED_APPS = [
     'likes',
     'comments',
 ]
+
 SITE_ID = 1
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -162,3 +166,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+print("Cloudinary URL:", os.environ.get("CLOUDINARY_URL"))
+print("DEFAULT_FILE_STORAGE is set to:", DEFAULT_FILE_STORAGE)
