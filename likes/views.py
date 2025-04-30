@@ -2,6 +2,7 @@ from rest_framework import generics, permissions
 from likes.models import Like
 from likes.serializers import LikeSerializer
 from rest_framework import permissions, generics, status
+from rest_framework.exceptions import PermissionDenied
 
 
 class LikeList(generics.ListCreateAPIView):
@@ -13,7 +14,10 @@ class LikeList(generics.ListCreateAPIView):
     queryset = Like.objects.all()
 
     def perform_create(self, serializer):
+        if not self.request.user.is_authenticated:
+            raise PermissionDenied("You must be logged in to like a post.")
         serializer.save(owner=self.request.user)
+
 
 class LikeDetail(generics.RetrieveUpdateDestroyAPIView):
     "Retrieve or delete a like"

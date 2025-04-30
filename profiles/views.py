@@ -33,9 +33,14 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
             return Response({'detail': 'Not allowed'}, status=status.HTTP_403_FORBIDDEN)
         return super().update(request, *args, **kwargs)
     
-class ProfileMeView(generics.RetrieveAPIView):
+class ProfileMeView(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
         return self.request.user.profile
+    
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx["request"] = self.request
+        return ctx
