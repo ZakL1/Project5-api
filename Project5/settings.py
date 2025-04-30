@@ -83,6 +83,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://shutter-main-990a60fdcc03.herokuapp.com"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
