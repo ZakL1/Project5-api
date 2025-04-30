@@ -21,10 +21,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),  # Login, logout, etc.
-    path('dj-rest-auth/registration/', 
-         include('dj_rest_auth.registration.urls')),  # Sign-up
-    path('', include('profiles.urls')),
-    path('', include('posts.urls')),
-    path('', include('likes.urls')),
-    path('', include('comments.urls')),
+    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),  # Sign-up
+    path('api/', include('profiles.urls')),  # profiles
+    path('api/', include('posts.urls')),  # posts
+    path('api/', include('likes.urls')),  # likes
+    path('api/', include('comments.urls')),  # comments
 ]
