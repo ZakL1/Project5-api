@@ -4,6 +4,7 @@ from comments.serializers import CommentSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework import status, permissions, generics
 from rest_framework.response import Response
+from posts.models import Post
 
 
 class CommentList(generics.ListCreateAPIView):
@@ -15,7 +16,14 @@ class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        post = get_object_or_404(Post, pk=self.request.data.get('post')) 
+        serializer.save(owner=self.request.user, post=post)
+
+    def get_queryset(self):
+        post_id = self.request.query_params.get('post')
+        if post_id:
+            return Comment.objects.filter(post_id=post_id)
+        return Comment.objects.none()
 
 
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):

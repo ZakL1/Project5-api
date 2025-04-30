@@ -8,7 +8,7 @@ class Comment(models.Model):
     """
     Comment model, for comments on a post
     """
-    owner = models.OneToOneField(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     body = models.TextField(validators=[MaxLengthValidator(50)])
