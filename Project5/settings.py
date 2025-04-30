@@ -38,7 +38,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['Project5.herokuapp.com']
+ALLOWED_HOSTS = ['shutter-api-aad07b464590.herokuapp.com']
 
 
 # Application definition
