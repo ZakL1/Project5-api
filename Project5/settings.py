@@ -86,6 +86,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://shutter-main-990a60fdcc03.herokuapp.com"
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'Project5.urls'
