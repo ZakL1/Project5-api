@@ -24,9 +24,6 @@ class Profile(models.Model):
 
 def create_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(
-            owner=instance,
-            image='https://res.cloudinary.com/dvajuxx87/image/upload/v1746104198/defaultprofile_hwuglk.jpg'
-        ) 
+        Profile.objects.create(owner=instance)
 
 post_save.connect(create_profile, sender=User)
