@@ -14,7 +14,10 @@ class Post(models.Model):
     title = models.CharField(max_length=255, blank=True)
     content = models.TextField(blank=True)
     image = models.ImageField(
-        upload_to='images/', default='https://res.cloudinary.com/dvajuxx87/image/upload/v1743791155/default2_lufpnp.jpg'
+        upload_to='images/', 
+        default='https://res.cloudinary.com/dvajuxx87/image/upload/v1745667613/media/images/default-upload_yzdrqp.png',
+        blank=True,
+        null=True
     )
 
     class Meta:
