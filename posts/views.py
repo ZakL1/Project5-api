@@ -6,25 +6,21 @@ from rest_framework import permissions, generics, status
 from django.db.models import Count
 
 
-class PostList(APIView):
+class PostList(generics.ListCreateAPIView):
     """
-    List all posts
-    No Create view (post method), as post creation handled by django signals
+    List all posts with pagination and allow creating new posts
     """
-    def get(self, request):
-        posts = Post.objects.annotate(
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        return Post.objects.annotate(
             likes_count=Count('likes', distinct=True),
             comments_count=Count('comments', distinct=True)
-        )
-        serializer = PostSerializer(posts, many=True, context={'request': request})
-        return Response(serializer.data)
-    
-    def post(self, request):
-        serializer = PostSerializer(data=request.data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save(owner=request.user)  # Ensure Post model uses ForeignKey for this
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        ).order_by('-created_at')
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
     
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     "Retrieve, delete or update a post"
