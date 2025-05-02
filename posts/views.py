@@ -14,16 +14,25 @@ class PostList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        return Post.objects.annotate(
+        queryset = Post.objects.annotate(
             likes_count=Count('likes', distinct=True),
             comments_count=Count('comments', distinct=True)
         ).order_by('-created_at')
 
+        search = self.request.query_params.get('search')
+        if search:
+            queryset = queryset.filter(title__icontains=search)
+
+        return queryset
+
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-    
+
+
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
-    "Retrieve, delete or update a post"
+    """
+    Retrieve, delete or update a post
+    """
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
 
@@ -38,13 +47,14 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
         if instance.owner != request.user and not request.user.is_superuser:
             return Response({'detail': 'Not allowed'}, status=status.HTTP_403_FORBIDDEN)
         return super().delete(request, *args, **kwargs)
-    
+
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         if instance.owner != request.user and not request.user.is_superuser:
             return Response({'detail': 'Not allowed'}, status=status.HTTP_403_FORBIDDEN)
         return super().update(request, *args, **kwargs)
-    
+
+
 class ProfileMeView(generics.RetrieveAPIView):
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticated]
