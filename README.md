@@ -107,12 +107,74 @@ has no css but still works perfectly fine
   - From the source section drop-down menu, select the Master Branch
   - Once the master branch has been selected, the page will be automatically refreshed with a detailed ribbon display to indicate the successful deployment. 
 
-- The site was deployed to Heroku. The steps to deploy are as follows: 
-  - In Heroku create app and link with github 
-  - Add procfile to your repository
-  - Install gunicorn to your repository
-  - In project5 settings add herokuapp to allowed hosts
-  - When in heroku go to deploy branch and click deploy main
+1. **Ensure Build Output is Ready**
+
+- Run the following command to create an optimized production build of your app:
+
+  - Run this command in the terminal
+  - npm run build
+  - This will generate a `build/` folder containing all the necessary static files for deployment.
+
+  - Install gunicorn in your django backend terminal by typing:
+  - pip install gunicorn
+  - pip freeze > requiremtns.txt
+
+  - Now create a new file in the root directory called 'Procfile', no extensions
+  - Add the follwing code to the file:
+  - web: gunicorn your_project_name.wsgi
+
+
+
+### 🌐 Deploying to Heroku
+
+1. **Create a New App on Heroku**
+
+   - Create a heroku account (if you don't have one)
+   - Go to [Heroku Dashboard](https://dashboard.heroku.com/)
+   - Click **"New" > "Create new app"**
+   - Enter a name (e.g., `Shutter`)
+   - Choose your region and click **Create app**
+
+2. **Connect to GitHub**
+
+   - In your Heroku app, go to the **Deploy** tab
+   - Choose **GitHub** as the deployment method
+   - Connect your GitHub account if prompted
+   - Search for and connect the correct repository
+
+3. **Set the Buildpack for Static Sites**
+
+   - Go to the **Settings** tab in Heroku
+   - Under **Buildpacks**, click **Add Buildpack**
+   - Select:  python
+   - Make sure it's listed above any other buildpacks
+
+4. **Set Congif Vars**
+
+   - Below the build packs select Reveal Config Vars
+    and add the follwing (add the left text to the key 
+    box and the right text to the value box):
+
+    - ALLOWED_HOST = your-app-name.herokuapp.com
+    - CLIENT_ORIGIN = https://your-frontend-domain.com
+    - CLIENT_ORIGIN_DEV = http://localhost:3000
+    - CLOUDINARY_URL = your-cloudinary-url
+    - DISABLE_COLLECTSTATIC = 1
+    - SECRET_KEY = your-django-secret-key
+
+5. **Add Heroku Postgres Add-on**
+
+   - In your Heroku app, go to the Resources tab
+   - In the Add-ons section, search for Heroku Postgres
+   - Select the free plan (e.g., Hobby Dev) and click Provision
+   - Heroku will automatically add a DATABASE_URL config var to your app
+
+
+### 🚀 Deploy the App
+
+1. Go to the **Deploy** tab
+2. Under **Manual deploy**, select your branch (e.g., `main`)
+3. Click **Deploy Branch**
 
 The live link can be found here - https://shutter-api-aad07b464590.herokuapp.com/
 
