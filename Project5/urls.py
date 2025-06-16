@@ -26,4 +26,5 @@ urlpatterns = [
     path('api/', include('posts.urls')),  # posts
     path('api/', include('likes.urls')),  # likes
     path('api/', include('comments.urls')),  # comments
+    path('api/', include('challenges.urls')),  # challenges
 ]
