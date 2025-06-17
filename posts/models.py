@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from PIL import Image
 from io import BytesIO
 from django.core.files.base import ContentFile
+from challenges.models import Challenge
 
 class Post(models.Model):
     """
@@ -18,6 +19,9 @@ class Post(models.Model):
         default='https://res.cloudinary.com/dvajuxx87/image/upload/v1745667613/media/images/default-upload_yzdrqp.png',
         blank=True,
         null=True
+    )
+    challenge = models.ForeignKey(
+        Challenge, on_delete=models.SET_NULL, null=True, blank=True, related_name='posts'
     )
 
     class Meta:

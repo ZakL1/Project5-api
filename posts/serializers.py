@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Post
 from likes.models import Like
+from challenges.models import Challenge
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -11,6 +12,8 @@ class PostSerializer(serializers.ModelSerializer):
     like_id = serializers.SerializerMethodField()
     likes_count = serializers.ReadOnlyField()
     comments_count = serializers.ReadOnlyField()
+    challenge = serializers.PrimaryKeyRelatedField(queryset=Challenge.objects.all(),
+                                                    allow_null=True, required=False)
 
     class Meta:
         model = Post
