@@ -4,6 +4,7 @@ from .models import Post
 from .serializers import PostSerializer
 from rest_framework import permissions, generics, status
 from django.db.models import Count
+from rest_framework import filters
 
 
 class PostList(generics.ListCreateAPIView):
@@ -12,6 +13,8 @@ class PostList(generics.ListCreateAPIView):
     """
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filter_backends = [filters.SearchFilter] 
+    search_fields = ['title', 'content', 'owner__username']
 
     def get_queryset(self):
         queryset = Post.objects.annotate(
