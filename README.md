@@ -78,6 +78,60 @@ This is the backend API for the Shutter web app, built using Django REST Framewo
 - Result: Pass — image updated and visible in frontend.
 
 
+- __Viewing Challenges as Anonymous User__
+- Action: Sent a GET request to /api/challenges/ without logging in.
+
+Expected Result: Status 200 OK, public data returned.
+
+Result: Pass — challenges list was accessible.
+
+
+- __Preventing Post Deletion by Another User__
+
+- Action:
+- Logged in as a different user (not the post owner) and attempted to send a DELETE request to /api/posts/{post_id}/.
+
+- Expected Result:
+- The request should be denied (e.g. with a 403 Forbidden) because only the post owner should be able to delete their own posts.
+
+- What Happened:
+- The server returned a 404 Not Found. This likely means the post was hidden from unauthorized users for security reasons, preventing even confirmation of its existence.
+
+- Result: Pass — The post could not be deleted by a different user, access was properly restricted.
+
+
+- __Top Posts Populating on Challenge Detail__
+- Action: Fetched a specific challenge using /api/challenges/:id/.
+
+- Expected Result: The response should include a top_posts field listing top-liked posts.
+
+- Result: Pass — top_posts returned as expected.
+
+
+- __Search Functionality__
+- Action: Sent a GET request to /api/posts/?search=landscape.
+
+- Expected Result: Posts with "landscape" in the title returned.
+
+- Result: Pass — correct results shown.
+
+
+- __Logout Functionality__
+- Action: Sent a POST request to /dj-rest-auth/logout/ with valid token.
+
+- Expected Result: Returns 200 OK and invalidates the token.
+
+- Result: Pass – user successfully logged out and could not access protected routes afterward.
+
+
+- __Linking a Post to a Challenge__
+- Action: Sent a POST request to /api/posts/ with a challenge ID field as an authenticated user.
+
+- Expected Result: Post is successfully created and associated with the correct challenge.
+
+- Result: Pass – challenge ID correctly linked.
+
+
 ## Automatic testing
 
 - Did not have time to implement this
