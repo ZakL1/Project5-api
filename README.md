@@ -179,7 +179,7 @@ has no css but still works perfectly fine
 
 
 
-### 🌐 Deploying to Heroku
+### Deploying to Heroku
 
 1. **Create a New App on Heroku**
 
@@ -224,7 +224,7 @@ has no css but still works perfectly fine
    - Heroku will automatically add a DATABASE_URL config var to your app
 
 
-### 🚀 Deploy the App
+### Deploy the App
 
 1. Go to the **Deploy** tab
 2. Under **Manual deploy**, select your branch (e.g., `main`)
