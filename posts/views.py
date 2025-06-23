@@ -48,13 +48,15 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         instance = self.get_object()
         if instance.owner != request.user and not request.user.is_superuser:
-            return Response({'detail': 'Not allowed'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail': 'Not allowed'},
+                            status=status.HTTP_403_FORBIDDEN)
         return super().delete(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         if instance.owner != request.user and not request.user.is_superuser:
-            return Response({'detail': 'Not allowed'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail': 'Not allowed'}, 
+                            status=status.HTTP_403_FORBIDDEN)
         return super().update(request, *args, **kwargs)
 
 
